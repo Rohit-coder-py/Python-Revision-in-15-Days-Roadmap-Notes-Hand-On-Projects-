@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>10-Day Python Revision Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0c0e14;
+    --bg2: #131620;
+    --bg3: #1a1d2b;
+    --surface: #1e2133;
+    --surface2: #252840;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #7c6fff;
+    --accent2: #a78bfa;
+    --teal: #2dd4bf;
+    --amber: #f59e0b;
+    --green: #34d399;
+    --red: #f87171;
+    --text: #e8eaf0;
+    --text2: #9095b0;
+    --text3: #565c7a;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Inter', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── BACKGROUND GRID ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,111,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,111,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── GLOW ORBS ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.25;
+  }
+  .orb1 { width: 500px; height: 500px; background: var(--accent); top: -150px; left: -100px; }
+  .orb2 { width: 400px; height: 400px; background: var(--teal); bottom: -100px; right: -100px; }
+
+  /* ── LAYOUT ── */
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* ── HERO HEADER ── */
+  .hero {
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    background: rgba(124,111,255,0.12);
+    border: 1px solid rgba(124,111,255,0.25);
+    border-radius: 100px;
+    padding: 5px 14px;
+    margin-bottom: 20px;
+  }
+  .hero-tag::before { content: '◆'; font-size: 8px; }
+
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--accent2) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .hero p {
+    font-size: 15px;
+    color: var(--text2);
+    max-width: 420px;
+    margin: 0 auto 28px;
+  }
+
+  /* ── GLOBAL PROGRESS ── */
+  .global-progress {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 2rem;
+  }
+
+  .gp-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .gp-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .gp-count {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent2);
+  }
+
+  .gp-bar-bg {
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .gp-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--accent), var(--teal));
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+
+  .gp-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .stat-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── DAILY SCHEDULE ── */
+  .schedule {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 600px) { .schedule { grid-template-columns: 1fr; } }
+
+  .sch-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sch-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .sch-info { min-width: 0; }
+  .sch-time { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text); }
+  .sch-desc { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+  /* ── SECTION HEADING ── */
+  .section-heading {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── DAY CARDS ── */
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .day-card:hover { border-color: var(--border2); }
+  .day-card.complete { border-color: rgba(52,211,153,0.3); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .day-header:hover { background: rgba(255,255,255,0.02); }
+
+  .day-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: var(--bg3);
+    color: var(--text3);
+    letter-spacing: 0.05em;
+    transition: background 0.2s, color 0.2s;
+  }
+  .day-card.complete .day-num {
+    background: rgba(52,211,153,0.15);
+    color: var(--green);
+  }
+  .day-card.active-day .day-num {
+    background: rgba(124,111,255,0.15);
+    color: var(--accent2);
+  }
+
+  .day-title {
+    flex: 1;
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 0;
+  }
+
+  .day-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .day-pct {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  .mini-ring {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  .chevron {
+    width: 16px;
+    height: 16px;
+    color: var(--text3);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .day-card.open .chevron { transform: rotate(180deg); }
+
+  /* ── DAY BODY ── */
+  .day-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(.4,0,.2,1);
+  }
+  .day-body.open { max-height: 2000px; }
+
+  .day-body-inner {
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── BLOCK SECTIONS ── */
+  .block {
+    margin-top: 18px;
+  }
+
+  .block-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .block-label-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  .block-learn .block-label { color: var(--accent2); }
+  .block-learn .block-label-dot { background: var(--accent); }
+
+  .block-practice .block-label { color: var(--amber); }
+  .block-practice .block-label-dot { background: var(--amber); }
+
+  .block-project {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 14px;
+  }
+
+  .block-project .block-label { color: var(--teal); }
+  .block-project .block-label-dot { background: var(--teal); }
+
+  .proj-name {
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .proj-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(45,212,191,0.12);
+    color: var(--teal);
+    border: 1px solid rgba(45,212,191,0.2);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  /* ── CHECKLIST ITEMS ── */
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    padding: 5px 6px;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+  .check-item:hover { background: rgba(255,255,255,0.03); }
+
+  .check-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid var(--border2);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+  }
+
+  .check-box.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .block-practice .check-box.checked {
+    background: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .block-project .check-box.checked {
+    background: var(--teal);
+    border-color: var(--teal);
+  }
+
+  .check-box svg { display: none; }
+  .check-box.checked svg { display: block; }
+
+  .check-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.55;
+    transition: color 0.15s;
+  }
+
+  .check-item.done .check-text {
+    color: var(--text3);
+    text-decoration: line-through;
+    text-decoration-color: var(--text3);
+  }
+
+  /* ── RESET BUTTON ── */
+  .footer {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .reset-btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text3);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .reset-btn:hover { color: var(--red); border-color: rgba(248,113,113,0.3); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 100px; }
+
+  /* ── COMPLETE BANNER ── */
+  .complete-banner {
+    display: none;
+    background: linear-gradient(135deg, rgba(52,211,153,0.1), rgba(45,212,191,0.1));
+    border: 1px solid rgba(52,211,153,0.3);
+    border-radius: 14px;
+    padding: 20px 24px;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .complete-banner.show { display: block; }
+  .complete-banner h3 { font-family: var(--display); font-size: 18px; color: var(--green); margin-bottom: 6px; }
+  .complete-banner p { font-size: 13px; color: var(--text2); }
+
+  @media (max-width: 640px) {
+    .day-title { font-size: 13px; }
+    .day-header { padding: 14px 16px; gap: 10px; }
+    .day-body-inner { padding: 0 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Python Mastery Track</div>
+    <h1>10-Day Revision Roadmap</h1>
+    <p>4 hours per day. Check off every task. Build every project. Ship to GitHub.</p>
+  </div>
+
+  <!-- COMPLETE BANNER -->
+  <div class="complete-banner" id="completeBanner">
+    <h3>🎉 Roadmap Complete!</h3>
+    <p>You've finished all 10 days. You're Python-ready. Now go build something real.</p>
+  </div>
+
+  <!-- GLOBAL PROGRESS -->
+  <div class="global-progress">
+    <div class="gp-top">
+      <span class="gp-label">Overall Progress</span>
+      <span class="gp-count" id="gpCount">0 / 0 tasks</span>
+    </div>
+    <div class="gp-bar-bg"><div class="gp-bar-fill" id="gpFill"></div></div>
+    <div class="gp-stats">
+      <div class="stat-pill"><div class="stat-dot" style="background:var(--accent)"></div>Concepts</div>
+      <div class="stat-pill"><div class="stat-dot" style="background:var(--amber)"></div>Practice</div>
+      <div class="stat-pill"><div class="stat-dot" style="background:var(--teal)"></div>Projects</div>
+    </div>
+  </div>
+
+  <!-- DAILY SCHEDULE -->
+  <div class="schedule">
+    <div class="sch-item">
+      <div class="sch-icon" style="background:rgba(124,111,255,0.12)">📚</div>
+      <div class="sch-info">
+        <div class="sch-time">1 hour</div>
+        <div class="sch-desc">Concept revision</div>
+      </div>
+    </div>
+    <div class="sch-item">
+      <div class="sch-icon" style="background:rgba(245,158,11,0.12)">⚡</div>
+      <div class="sch-info">
+        <div class="sch-time">1 hour</div>
+        <div class="sch-desc">Practice drills</div>
+      </div>
+    </div>
+    <div class="sch-item">
+      <div class="sch-icon" style="background:rgba(45,212,191,0.12)">🛠</div>
+      <div class="sch-info">
+        <div class="sch-time">2 hours</div>
+        <div class="sch-desc">Project building</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">Daily Breakdown</div>
+
+  <!-- DAYS CONTAINER -->
+  <div id="daysContainer"></div>
+
+  <div class="footer">
+    <button class="reset-btn" onclick="resetAll()">Reset all progress</button>
+  </div>
+
+</div>
+
+<script>
+const DAYS = [
+  {
+    day: 1, title: "Core Foundations Reloaded",
+    learn: ["Variables & data types","Input / output","Type casting","All operators (arithmetic, logical, comparison, bitwise)","Basic debugging mindset"],
+    practice: ["Type conversion problems","Operator-based mini questions"],
+    project: { name: "CLI Calculator Pro", items: ["Add, subtract, multiply, divide","Handle invalid input gracefully","Menu-based system loop","Use functions for each operation","Clean formatted output","Push to GitHub: cli-calculator-pro"] }
+  },
+  {
+    day: 2, title: "Conditions + Loops Mastery",
+    learn: ["if-elif-else chains","Nested conditions","for loops","while loops","break & continue"],
+    practice: ["Pattern printing problems","Prime number logic","Palindrome check"],
+    project: { name: "Smart Number Analyzer", items: ["Prime number checker","Palindrome checker","Even / odd detection","Factorial calculator","Range analysis with loops","Integrate Day 1 concepts"] }
+  },
+  {
+    day: 3, title: "Strings Deep Dive",
+    learn: ["All built-in string methods","Slicing and indexing","f-string formatting","String immutability"],
+    practice: ["Reverse a string","Count specific characters","Remove duplicate characters","Anagram checker"],
+    project: { name: "Text Processor CLI", items: ["Word count","Character count (with/without spaces)","Reverse text","Replace words","Find & highlight keywords","Menu system with clean UI"] }
+  },
+  {
+    day: 4, title: "Lists, Tuples & Sets",
+    learn: ["List methods (append, pop, sort, etc.)","List comprehensions","Tuple basics & immutability","Set operations"],
+    practice: ["Remove duplicates from a list","Sorting algorithms","Set union, intersection, difference"],
+    project: { name: "Contact Book v1", items: ["Add a contact","Delete a contact","Search a contact","Display all contacts","Sort contacts alphabetically","Fix previous bugs & clean structure"] }
+  },
+  {
+    day: 5, title: "Dictionaries + Nested Data",
+    learn: ["Dictionary methods (get, update, pop, etc.)","Nested dictionaries","Dictionary comprehensions","Loop through dicts"],
+    practice: ["Student data handling","Group & aggregate key-value problems"],
+    project: { name: "Contact Book v2 (Advanced)", items: ["Store name, phone & email per contact","Search by name (case-insensitive)","Update contact details","Delete contact","List all contacts neatly","Apply all Day 1–5 concepts"] }
+  },
+  {
+    day: 6, title: "Functions — Core of Clean Code",
+    learn: ["Defining & calling functions","Positional, default & keyword arguments","Return values","*args and **kwargs","Lambda functions"],
+    practice: ["Rewrite Day 1–5 code using functions","Modular code exercises"],
+    project: { name: "Modular Utility Toolkit", items: ["Calculator module","String tools module","Number tools module (primes, palindromes, etc.)","Main menu ties all modules together","Focus on DRY & reusability"] }
+  },
+  {
+    day: 7, title: "File Handling 🔥",
+    learn: ["open(), read(), write(), append()","The with statement","os module basics","JSON read & write","Pickle basics"],
+    practice: ["Save and load data from text files","JSON serialization exercises"],
+    project: { name: "Persistent Contact Manager", items: ["Save contacts to JSON file","Load contacts on startup","Update & delete saved contacts","Backup contacts to a separate file","Use with statement correctly"] }
+  },
+  {
+    day: 8, title: "Error Handling + Debugging",
+    learn: ["try-except blocks","Multiple except clauses","else & finally clauses","Raising custom exceptions","Logging basics"],
+    practice: ["Handle invalid user inputs","Crash-proof previous programs"],
+    project: { name: "Robust CLI System", items: ["Upgrade Day 7 project with full error handling","No crashes on bad input","Smart, user-friendly error messages","Validate all inputs before processing","Make it completely user-proof"] }
+  },
+  {
+    day: 9, title: "Intro to Libraries — Bridge to Data Science",
+    learn: ["NumPy arrays & operations","Pandas Series & DataFrames","Reading CSV with Pandas","Basic DataFrame operations"],
+    practice: ["Create & manipulate NumPy arrays","Read a CSV and explore it","Filter rows, compute column stats"],
+    project: { name: "Data Analyzer CLI", items: ["Load any CSV file from path","Display first 5 rows","Show column names & types","Calculate mean, median, max, min","Show basic describe() stats","This is your data science entry point"] }
+  },
+  {
+    day: 10, title: "Final Project — GitHub Level 🚀",
+    learn: ["Review all 9 days of concepts","Project structuring best practices","Writing a good README","requirements.txt & dependencies"],
+    practice: ["Review & refactor all previous code","Identify and eliminate code smells"],
+    project: { name: "CLI Personal Data Manager", items: ["User login / signup system (file-based)","Contact management module","File storage with JSON","Basic CSV data analysis","Full error handling throughout","main.py + utils.py + data/ structure","Write a proper README.md","Add requirements.txt","Push to GitHub with screenshots in README"] }
+  }
+];
+
+const STORAGE_KEY = 'py10day_checklist_v2';
+let state = {};
+
+function load() {
+  try { const r = localStorage.getItem(STORAGE_KEY); if (r) state = JSON.parse(r); } catch(e) {}
+}
+
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function tid(day, section, idx) { return `d${day}_${section}_${idx}`; }
+function getDayIds(d) {
+  const ids = [];
+  d.learn.forEach((_, i) => ids.push(tid(d.day,'l',i)));
+  d.practice.forEach((_, i) => ids.push(tid(d.day,'p',i)));
+  d.project.items.forEach((_, i) => ids.push(tid(d.day,'pr',i)));
+  return ids;
+}
+
+function toggle(id) { state[id] = !state[id]; save(); refresh(); }
+
+function checkSVG() {
+  return `<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function ringHTML(done, total) {
+  const r = 13, cx = 15, cy = 15, circ = 2 * Math.PI * r;
+  const pct = total ? done / total : 0;
+  const dash = pct * circ;
+  const color = pct === 1 ? '#34d399' : pct > 0 ? '#7c6fff' : '#252840';
+  return `<svg class="mini-ring" viewBox="0 0 30 30">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#1a1d2b" stroke-width="3"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="3"
+      stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ/4}"
+      stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+  </svg>`;
+}
+
+function buildChecklist(items, section, dayNum, blockClass) {
+  return items.map((text, i) => {
+    const id = tid(dayNum, section, i);
+    const done = !!state[id];
+    return `<li class="check-item ${done ? 'done' : ''}" data-id="${id}">
+      <div class="check-box ${done ? 'checked' : ''}">${done ? checkSVG() : ''}</div>
+      <span class="check-text">${text}</span>
+    </li>`;
+  }).join('');
+}
+
+function buildDayCard(d) {
+  const ids = getDayIds(d);
+  const done = ids.filter(id => state[id]).length;
+  const total = ids.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const complete = pct === 100;
+  const isOpen = !!state[`open_d${d.day}`];
+
+  return `<div class="day-card ${complete ? 'complete' : ''} ${isOpen ? 'open' : ''}" id="card-d${d.day}">
+    <div class="day-header" data-day="${d.day}">
+      <span class="day-num">Day ${d.day}</span>
+      <span class="day-title">${d.title}</span>
+      <div class="day-meta">
+        <span class="day-pct">${pct}%</span>
+        ${ringHTML(done, total)}
+        <svg class="chevron" viewBox="0 0 16 16" fill="none">
+          <polyline points="4,6 8,10 12,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="day-body ${isOpen ? 'open' : ''}">
+      <div class="day-body-inner">
+        <div class="block block-learn">
+          <div class="block-label"><div class="block-label-dot"></div>Learn / Revise</div>
+          <ul class="checklist">${buildChecklist(d.learn, 'l', d.day, 'block-learn')}</ul>
+        </div>
+        <div class="block block-practice">
+          <div class="block-label"><div class="block-label-dot"></div>Practice</div>
+          <ul class="checklist">${buildChecklist(d.practice, 'p', d.day, 'block-practice')}</ul>
+        </div>
+        <div class="block block-project">
+          <div class="block-label"><div class="block-label-dot"></div>Project</div>
+          <div class="proj-name"><span class="proj-tag">Build</span> ${d.project.name}</div>
+          <ul class="checklist">${buildChecklist(d.project.items, 'pr', d.day, 'block-project')}</ul>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function refresh() {
+  const container = document.getElementById('daysContainer');
+  container.innerHTML = DAYS.map(buildDayCard).join('');
+
+  let totalDone = 0, totalAll = 0;
+  DAYS.forEach(d => {
+    const ids = getDayIds(d);
+    totalDone += ids.filter(id => state[id]).length;
+    totalAll += ids.length;
+  });
+
+  const pct = totalAll ? Math.round(totalDone / totalAll * 100) : 0;
+  document.getElementById('gpFill').style.width = pct + '%';
+  document.getElementById('gpCount').textContent = `${totalDone} / ${totalAll} tasks · ${pct}%`;
+
+  const banner = document.getElementById('completeBanner');
+  banner.classList.toggle('show', pct === 100);
+
+  // Event: headers
+  container.querySelectorAll('.day-header').forEach(h => {
+    h.addEventListener('click', () => {
+      const dayNum = h.dataset.day;
+      const card = document.getElementById(`card-d${dayNum}`);
+      const body = card.querySelector('.day-body');
+      const isOpen = body.classList.contains('open');
+      state[`open_d${dayNum}`] = !isOpen;
+      save();
+      card.classList.toggle('open', !isOpen);
+      body.classList.toggle('open', !isOpen);
+    });
+  });
+
+  // Event: checkboxes
+  container.querySelectorAll('.check-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggle(item.dataset.id);
+    });
+  });
+}
+
+function resetAll() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    state = {};
+    save();
+    refresh();
+  }
+}
+
+load();
+refresh();
+</script>
+</body>
+</html>
